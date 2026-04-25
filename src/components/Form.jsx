@@ -1,17 +1,20 @@
 import { Component } from "react";
 import x from './Form.module.css'
+import { useDispatch } from "react-redux";
+import { addContact } from "../redux/actions";
 
 
 export class Form extends Component {
 
     inputData = () => {
+        const dispatch = useDispatch()
         const dataFromInput = document.querySelector('#input')
         const valueFromInput = dataFromInput.value
 
         const dataFromInput2 = document.querySelector('#input2')
         const valueFromInput2 = dataFromInput2.value
 
-        this.props.inputData(valueFromInput, valueFromInput2)
+        dispatch(addContact(valueFromInput, valueFromInput2))
 
         dataFromInput.value = ''
         dataFromInput2.value = ''
@@ -34,7 +37,7 @@ export class Form extends Component {
 
                 <label htmlFor="input2">Number</label>
                 <input
-                className={x.formClas}
+                    className={x.formClas}
                     id="input2"
                     type="tel"
                     name="number"
@@ -43,7 +46,7 @@ export class Form extends Component {
                     required
                 />
 
-                <button type="button" onClick={this.inputData}>Add Contact</button>
+                <button type="button" onClick={() => this.inputData()}>Add Contact</button>
             </form>
         )
     }
