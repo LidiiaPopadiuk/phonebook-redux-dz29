@@ -1,38 +1,34 @@
-import { Component } from "react";
+import styled from "styled-components";
 import contactsImg from '../img/noContactsYet.jpg';
-// import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getVisibleContacts } from "../redux/selectors";
+import { removeContact } from '../redux/actions';
 
-export class Contacts extends Component {
+const Button = styled.button`
+  background-color: rgb(255, 214, 220);
+`
 
-    // deleteContact = (e) => {
-    //     const contactId = e.target.id
-    //     this.props.deleteData(contactId)
-    // }
-    // const contacts = useSelector()
+export const Contacts = () => {
+    const dispatch = useDispatch()
 
-    render() {
-        // const { contacts, filter } = this.props.listData
-        // const filterValue = filter.toUpperCase()
+    const contacts = useSelector(getVisibleContacts || [])
+    console.log(contacts);
 
-        // const filterContacts = contacts.filter((contact) => {
-        //     return contact.name.toUpperCase().includes(filterValue)
-        // })
-        return (
-            <div>
-                <h2>Contacts</h2>
-                {[].length === 0 ? (
-                    <div>
-                        <p>No contacts yet</p>
-                        <img style={{ width: '100px', height: '100px' }} src={contactsImg} alt={contactsImg} />
-                    </div>
-                ) : (
-                    <ul>
-                        {[].map(contact => {
-                            return <li key={contact.id}>{contact.name}: {contact.number} <button id={contact.id} onClick={this.deleteContact}>Delete</button></li>
-                        })}
-                    </ul>
-                )}
-            </div>
-        )
-    }
+    return (
+        <div>
+            <h2>Contacts</h2>
+            {contacts.length === 0 ? (
+                <div>
+                    <p>No contacts yet</p>
+                    <img style={{ width: '100px', height: '100px' }} src={contactsImg} alt={contactsImg} />
+                </div>
+            ) : (
+                <ul>
+                    {contacts.map(contact => {
+                        return <li key={contact.id}>{contact.name}: {contact.number} <Button id={contact.id} onClick={() => dispatch(removeContact(contact.id))}>Delete</Button></li>
+                    })}
+                </ul>
+            )}
+        </div>
+    )
 }

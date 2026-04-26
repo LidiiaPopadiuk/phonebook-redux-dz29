@@ -1,53 +1,71 @@
-import { Component } from "react";
+
 import x from './Form.module.css'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addContact } from "../redux/actions";
+import { getContacts } from '../redux/selectors';
 
 
-export class Form extends Component {
+export const Form = () => {
+    const dispatch = useDispatch()
+    const contacts = useSelector(getContacts)
 
-    inputData = () => {
-        const dispatch = useDispatch()
-        const dataFromInput = document.querySelector('#input')
-        const valueFromInput = dataFromInput.value
+    const inputData = (e) => {
+        e.preventDefault()
 
-        const dataFromInput2 = document.querySelector('#input2')
-        const valueFromInput2 = dataFromInput2.value
+        const name = e.target.elements.nameText.value
+        const number = e.target.elements.number.value
 
-        dispatch(addContact(valueFromInput, valueFromInput2))
+        const nameUpper = name.toUpperCase()
 
-        dataFromInput.value = ''
-        dataFromInput2.value = ''
+        const nameExist = contacts.some((contact) => {
+            return contact.name.toUpperCase() === nameUpper;
+        });
 
-        // this.props.telData(valueFromInput2)
+        const numberExist = contacts.some((contact) => {
+            return contact.number === number;
+        });
+
+        if (nameExist) {
+            alert(`${name} is already in contacts!`);
+            return;
+        }
+
+        if (numberExist) {
+            alert(`${number} is already exist!`);
+            return;
+        }
+
+        dispatch(addContact(name, number))
+
+        e.target.reset()
     }
-    render() {
-        return (
-            <form className={x.formClas}>
 
-                <label htmlFor="input">Name</label>
-                <input
-                    id="input"
-                    type="text"
-                    name="name"
-                    pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                    title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-                    required
-                />
+    return (
+        <form onSubmit={inputData} className={x.formClas}>
 
-                <label htmlFor="input2">Number</label>
-                <input
-                    className={x.formClas}
-                    id="input2"
-                    type="tel"
-                    name="number"
-                    pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-                    title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-                    required
-                />
+            <label htmlFor="input">Name</label>
+            <input
+                id="input"
+                type="text"
+                name="nameText"
+                pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+                title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+                required
+            />
 
-                <button type="button" onClick={() => this.inputData()}>Add Contact</button>
-            </form>
-        )
-    }
+            <label htmlFor="input2">Number</label>
+            <input
+                className={x.formClas}
+                id="input2"
+                type="tel"
+                name="number"
+                pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+                title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+                required
+            />
+
+            <button type="submit">Add Contact</button>
+        </form>
+    )
+
 }

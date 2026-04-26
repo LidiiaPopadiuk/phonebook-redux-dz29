@@ -1,18 +1,19 @@
-import { Component } from "react";
 
-export class Filter extends Component {
+import { findContact } from "../redux/actions"
+import { useDispatch } from "react-redux"
 
-    filterNames = () => {
-        const inputFilter = document.querySelector("#filterInput")
-        const inputValue = inputFilter.value
-        this.props.filterData(inputValue)
+export const Filter = () => {
+    const dispatch = useDispatch()
+
+    const filterNames = (e) => {
+        const elementInput = e.target.value
+        dispatch(findContact(elementInput))
     }
-    render() {
-        return(
-            <div>
-                <p>Find contacts by name</p>
-                <input onInput={this.filterNames} id="filterInput" type="text" />
-            </div>
-        )
-    }
+
+    return (
+        <div>
+            <p>Find contacts by name</p>
+            <input onInput={filterNames} name="filter" id="filterInput" type="text" />
+        </div>
+    )
 }

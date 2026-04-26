@@ -11,3 +11,18 @@ export const addContact = (name, number) => {
     },
   };
 };
+
+export const removeContact = (id) => {
+  return {
+    type: ACTION_TYPES.remove,
+    payload: id
+  };
+};
+
+
+export const findContact = name => {
+  return {
+    type: ACTION_TYPES.find,
+    payload: name
+  }
+}

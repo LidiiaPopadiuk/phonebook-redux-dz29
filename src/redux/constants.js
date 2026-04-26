@@ -1,3 +1,5 @@
 export const ACTION_TYPES = {
-    add: "contact/addContact"
+    add: "contact/addContact",
+    remove: "contact/removeContact",
+    find: "contact/findContact"
 }
